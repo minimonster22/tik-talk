@@ -6,10 +6,12 @@ import { switchMap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
 import { SvgIcon } from '../../common-ui/svg-icon/svg-icon';
+import { ImageUrlPipe } from '../../helpers/pipes/image-url-pipe';
+import { PostFeed } from './post-feed/post-feed';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [ProfileHeader, AsyncPipe, SvgIcon, RouterLink],
+  imports: [ProfileHeader, AsyncPipe, SvgIcon, RouterLink, ImageUrlPipe, PostFeed],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.scss',
 })
@@ -18,6 +20,7 @@ export class ProfilePage {
   route = inject(ActivatedRoute);
 
   me$ = toObservable(this.profileService.me);
+  subscribers$ = this.profileService.getSubscribersShortList(5);
 
   profile$ = this.route.params.pipe(
     switchMap(({ id }) => {
